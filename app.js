@@ -5,7 +5,7 @@ const usersRouter = require('./routes/users-v1')
 const usersModel = require('./model/users')
 
 const app = express()
-const port = process.env.PORT || '3000'
+const port = process.env.PORT || 3000
 
 app.use(bodyParser.json())
 
@@ -16,5 +16,7 @@ app.use('/v1/users', usersRouter(usersModel))
 /**
  * Listen on provided port, on all network interfaces.
  */
-app.listen(port)
+app.listen(port,function(){
+  console.log("listining on port "+port)
+})
 

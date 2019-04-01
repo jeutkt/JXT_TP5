@@ -5,6 +5,7 @@ let usersModel = undefined
 
 /* Control usermodel initialisation */
 router.use((req, res, next) => {
+    console.log()
     if (!usersModel) {
         res
             .status(500)
