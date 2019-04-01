@@ -10,5 +10,10 @@
   "license": "ISC",
   "devDependencies": {
     "eslint": "^5.15.3"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "uuid": "^3.3.2"
   }
 }
