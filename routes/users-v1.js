@@ -21,7 +21,7 @@ router.get('/:id', function (req, res, next) {
         try {
             const userFound = usersModel.get(id)
             if (userFound) {
-                res.json(userFound)
+                res.status(200).json(userFound)
             } else {
                 res
                     .status(404)
@@ -72,9 +72,9 @@ router.patch('/:id', function (req, res, next) {
         try {
             if (id && newUserProperties) {
                 const updated = usersModel.update(id, newUserProperties)
-                res
-                    .status(200)
-                    .json(updated)
+                res.status(200)
+                res.json(updated)
+                    
             } else {
                 res
                     .status(400)

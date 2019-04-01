@@ -49,6 +49,7 @@ const update = (id, newUserProperties) => {
             // Object.assign permet d'éviter la suppression de l'ancien élément puis l'ajout
             // du nouveau Il assigne à l'ancien objet toutes les propriétés du nouveau
             Object.assign(oldUser, newUser)
+            return newUser
         } else {
             throw new Error('user.not.valid')
         }
