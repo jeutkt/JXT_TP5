@@ -34,7 +34,7 @@ describe("Users tests", () => {
     chai
       .request(app)
       .post("/v1/users")
-      .send({ name: "Robert", login: "roro", age: 24 })
+      .send({ name: "Robert", login: "roro", age: 24,password:"roropass" })
       .end((err, res) => {
         res.should.have.status(201)
         res.should.be.json
@@ -44,6 +44,8 @@ describe("Users tests", () => {
         res.body.name.should.equal("Robert")
         res.body.login.should.equal("roro")
         res.body.age.should.equal(24)
+        res.body.should.have.property("password")
+        res.body.password.should.not.equal("roropass")
         done()
       })
   })
@@ -51,7 +53,7 @@ describe("Users tests", () => {
     chai
       .request(app)
       .patch("/v1/users/45745c60-7b1a-11e8-9c9c-2d42b21b1a3e")
-      .send({ name: "Robertinio", age: 45 })
+      .send({ name: "Robertinio", age: 45, password:"newpass" })
       .end((err, res) => {
         res.should.have.status(200)
         res.should.be.json
@@ -61,6 +63,8 @@ describe("Users tests", () => {
         res.body.name.should.equal("Robertinio")
         res.body.login.should.equal("pedro")
         res.body.age.should.equal(45)
+        res.body.should.have.property("password")
+        res.body.password.should.not.equal("newpass")
         done()
       })
   })
