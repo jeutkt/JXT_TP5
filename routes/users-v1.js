@@ -5,7 +5,6 @@ let usersModel = undefined
 
 /* Control usermodel initialisation */
 router.use((req, res, next) => {
-    console.log()
     if (!usersModel) {
         res
             .status(500)
@@ -21,7 +20,7 @@ router.get('/:id', function (req, res, next) {
         try {
             const userFound = usersModel.get(id)
             if (userFound) {
-                res.status(200).json(userFound)
+                res.json(userFound)
             } else {
                 res
                     .status(404)
@@ -72,9 +71,9 @@ router.patch('/:id', function (req, res, next) {
         try {
             if (id && newUserProperties) {
                 const updated = usersModel.update(id, newUserProperties)
-                res.status(200)
-                res.json(updated)
-                    
+                res
+                    .status(200)
+                    .json(updated)
             } else {
                 res
                     .status(400)
@@ -134,5 +133,5 @@ router.get('/', function (req, res, next) {
 /** return a closure to initialize model */
 module.exports = (model) => {
     usersModel = model
-return router
+    return router
 }
