@@ -18,7 +18,7 @@ router.get("/:id", function(req, res, next) {
     try {
       const userFound = usersModel.get(id);
       if (userFound) {
-        res.json(userFound);
+        res.status(200).json(userFound);
       } else {
         res.status(404).json({ message: `User not found with id ${id}` });
       }
@@ -38,7 +38,6 @@ router.post("/", function(req, res, next) {
     try {
       usersModel.add(newUser, (err, result) => {
         if (err) {
-          console.log(err);
           res.status(400).json({message:err.message})
         } else {
           res.status(201).send(result);
@@ -61,11 +60,11 @@ router.patch("/:id", function(req, res, next) {
     try {
       if (id && newUserProperties) {
         usersModel.update(id, newUserProperties, (err, result) => {
-            console.log(err)
             if (err) {
               if(err.message==="user.not.found")
             res.status(404).json({message:err.message})
             else{
+               
                 res.status(400).json({message:err.message})
             }
           } else {

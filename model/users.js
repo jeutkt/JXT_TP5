@@ -19,7 +19,8 @@ const users = [
     id: "45745c60-7b1a-11e8-9c9c-2d42b21b1a3e",
     name: "Pedro Ramirez",
     login: "pedro",
-    age: 44
+    age: 44,
+    password:"$2b$10$XODLQNrRuMWWxGWqy5MqnOagHnlMCmA.wue57dMcL.DXMm0r.HhYW"
   },
   {
     id: "456897d-98a8-78d8-4565-2d42b21b1a3e",
@@ -31,7 +32,8 @@ const users = [
     id: "987sd88a-45q6-78d8-4565-2d42b21b1a3e",
     name: "Rose Doolan",
     login: "rose",
-    age: 36
+    age: 36,
+    
   },
   {
     id: "654de540-877a-65e5-4565-2d42b21b1a3e",

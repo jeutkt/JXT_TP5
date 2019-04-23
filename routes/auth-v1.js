@@ -1,46 +1,56 @@
-const express=express()
-const router=express.Router();
-const idp=require('./../model/idp')
+const express = require("express");
+const router = express.Router();
 
+let loggerModel = undefined;
 
+router.post("/login", (req, res) => {
+  const id = req.body.id;
+  const login = req.body.login;
+  const password = req.body.password;
+  if (id && login && password) {
+    loggerModel.login(id, login, password, (err, result) => {
+      if (result) {
+        res.status(200).json({
+          message: `ok`,
+          tokenaccess: result
+        });
+      } else {
+        res.status(401).json({
+          message: `unauthorized`
+        });
+      }
+    });
+  } else {
+    res.status(401).json({
+      message: "unauthorized"
+    });
+  }
+});
 
-router.post('/v1/auth/login',(req,res)=>{
-    const login=req.login
-    const password=req.password
-    if( login && password){
-    let token=idp.login(login,password)
-        if(token){
-            return res.status(200).json({
-                message="ok",
-                token=token            
-            })
-        }
-        else{
-            return res.status(401).json({
-                message="unauthorized"
-            })
-        }
-        }
-})
+router.get("/verifyaccess", (req, res) => {
+  let token = req.header("Authorization");
+  if (!token) {
+    res.status(401).json({
+      message: "unauthorized"
+    });
+  } else {
+    token = token.replace("bearer ", "");
+    loggerModel.verifyacces(token, (err, result) => {
+      if (err) {
+        res.status(401).json({
+          message: "unauthorized"
+        });
+      } else {
+        res.status(200).json({
+          message: "ok",
+          tokenaccess: result
+        });
+      }
+    });
+  }
+});
 
-router.get('/v1/auth/verifyaccess',(req,res)=>{
-   const token =req.headers['x-access-token']
-   const accesok=idp.verifyacces(token)
-   if(!token || !accesok){
-       return res.status(401).json({
-           message="unauthorized",
-       })
-   }
-   else{
-       return res.status(200).json({
-           message:"ok",
-           token=token
-       })
-   }
-    
-}
-    
-
-
-
-
+module.exports = model => {
+  loggerModel = model;
+  return router;
+};

@@ -1,52 +1,55 @@
-let jwt=require('jsonwebtoken')
-const fs=require('fs')
-const bcrypt= require('bcrypt')
+let jwt = require("jsonwebtoken");
+const fs = require("fs");
+const bcrypt = require("bcrypt");
 
-
-const  usersModel=require('./users')
-
+const usersModel = require("./users");
 
 //read private and public key
-var privateKEY = fs.readFileSync('./jwtRS256.key', 'utf8');
-var publicKey = fs.readFileSync('./jwtRS256.key.pub','utf8')
+const privateKey = fs.readFileSync(__dirname + "/jwtRS256.key", "utf8");
+const publicKey = fs.readFileSync(__dirname + "/jwtRS256.key.pub", "utf8");
 
-
-const login=(login,password)=>{
-    const hashlogin=findhash(login)
-    bcrypt.compare(password, hashlogin, function(err, res) {
-        if(res){
-            return jwt.sign(login, privateKey, { algorithm: 'RS256' }, function(err, token) {
-                console.log(token);
-              });
+const login = (id, login, password, callback) => {
+  const data = findhash(id);
+  if (data && data.loginid === login) {
+    if (data.pass) {
+      bcrypt.compare(password, data.pass, (err, res)=> {
+        if (res) {
+          jwt.sign(login, privateKey, { algorithm: "RS256" }, function(
+            err,
+            token
+          ) {
+            if (err) {
+              callback(err, null);
+            } else {
+              callback(null, token);
             }
-        else{
-            return false
-            }
-        
-    });
-}
-        
-         
-    
-  
-
-
-const findhash=(login)=>{
-    return (usersModel.get(login).password)
-}
-
-
-const verifyacces=(token)=>{
-    jwt.verify(token,publicKey,function(err,decoded){
-        if(err){
-            return false
+          });
+        } else {
+          callback(err, null);
         }
-        else{
-            return decoded
-        }
-        
-    })
-}
+      });
+    } else {
+      callback(new Error("id.not.valid"), null);
+    }
+  } else {
+    callback(new Error("login.not.valid"), null);
+  }
+};
 
-exports.login=login
-exports.verifyacces=verifyacces 
+const findhash = id => {
+  const user = usersModel.get(id);
+  return user ? {pass:user.password,loginid:user.login} : null;
+};
+
+const verifyacces = (token, callback) => {
+  jwt.verify(token, publicKey, function(err, decoded) {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, decoded);
+    }
+  });
+};
+
+exports.login = login;
+exports.verifyacces = verifyacces;
